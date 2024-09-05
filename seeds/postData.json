@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Test post 1",
+    "content": "This post is a seed test.",
+    "date-created": "November 22, 2022 11:00:00",
+    "user_id": 3
+  },
+  {
+    "title": "Test Post 2",
+    "content": "A test seed post.",
+    "date-created": "March 22, 2024 11:00:00",
+    "user_id": 3
+  },
+  {
+    "title": "Test post 3",
+    "content": "Test post.",
+    "date-created": "January 22, 2022 11:00:00",
+    "user_id": 3
+  }
+]
