@@ -12,7 +12,8 @@ if (process.env.DB_URL) {
     process.env.DB_PASSWORD,
     {
       host: process.env.DB_HOST,
-      dialect: 'postgres'
+      dialect: 'postgres',
+      port: process.env.DB_PORT
     }
   );
 }
