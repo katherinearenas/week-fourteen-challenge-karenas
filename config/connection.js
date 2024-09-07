@@ -18,4 +18,16 @@ if (process.env.DB_URL) {
   );
 }
 
+
+// const sequelize = new Sequelize({
+//   dialect: 'postgres',
+//   database: process.env.DB_NAME,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASSWORD,
+//   host: 'localhost',
+//   port: 5432,
+//   ssl: true,
+//   clientMinMessages: 'notice',
+// });
+
 module.exports = sequelize;
