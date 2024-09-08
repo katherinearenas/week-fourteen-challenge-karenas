@@ -11,11 +11,23 @@ if (process.env.DB_URL) {
     process.env.DB_USER,
     process.env.DB_PASSWORD,
     {
-      host: process.env.DB_HOST,
+      host: 'localhost',
       dialect: 'postgres',
-      port: process.env.DB_PORT
+    //   port: process.env.DB_PORT
     }
   );
 }
+
+
+// const sequelize = new Sequelize({
+//   dialect: 'postgres',
+//   database: process.env.DB_NAME,
+//   user: process.env.DB_USER,
+//   password: process.env.DB_PASSWORD,
+//   host: 'localhost',
+//   port: 5432,
+//   ssl: true,
+//   clientMinMessages: 'notice',
+// });
 
 module.exports = sequelize;

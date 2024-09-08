@@ -58,4 +58,25 @@ router.post('/logout', (req, res) => {
   }
 });
 
+// router.post('/signup', async (req, res) => {
+//   try {
+//     const { username, email, password } = req.body;
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     const newMember = await Member.create({
+//       name: username,
+//       email,
+//       password: hashedPassword
+//     });
+//     res.json({ success: true, message: 'Signup successful' });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({
+//       success: false,
+//       message: 'Internal Server Error',
+//       error: error.message
+//     });
+//   }
+// });
+
 module.exports = router;
