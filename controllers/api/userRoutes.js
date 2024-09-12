@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const bcrypt = require('bcrypt');
 const { User } = require('../../models');
 
 router.post('/', async (req, res) => {
@@ -61,7 +62,7 @@ router.post('/logout', (req, res) => {
 router.post('/signup', async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 8);
 
     const newMember = await Member.create({
       name: username,
