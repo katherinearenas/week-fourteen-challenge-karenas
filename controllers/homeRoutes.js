@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Post, User } = require('../models');
+const { Post, User, Comment } = require('../models');
 const withAuth = require('../utils/auth');
 
 router.get('/', withAuth, async (req, res) => {
@@ -12,7 +12,8 @@ router.get('/', withAuth, async (req, res) => {
           ],
         });
    console.log('Posts List: ', posts);
-   res.render('homepage', { posts: posts });
+   const postList = posts.map(post => post.get({ plain: true }));
+   res.render('homepage', { posts: postList });
   } catch(err) {
   res.status(500)
   .json({ message: 'Failed to fetch posts', error: err.message });
@@ -57,10 +58,15 @@ router.get('/posts/:id', async (req, res) => {
           model: User,
           attributes: ['name'],
         },
+        {
+          model: Comment,
+          include: [User]
+        }
       ],
     });
 
     const post = postData.get({ plain: true });
+    console.log(post)
 
     res.render('posts', {
       ...post,

@@ -2,18 +2,19 @@ const newFormHandler = async (event) => {
     event.preventDefault();
   
     const comment = document.querySelector('#comment-content').value.trim();
+    const postId = event.target.getAttribute("data-id")
   
-    if (comment) {
+    if (comment && event.target.hasAttribute('data-id')) {
       const response = await fetch(`/api/comments`, {
         method: 'POST',
-        body: JSON.stringify({ comment_text }),
+        body: JSON.stringify({ comment_text: comment, post_id: postId }),
         headers: {
           'Content-Type': 'application/json',
         },
       });
   
       if (response.ok) {
-        document.location.replace('/posts/:id');
+        document.location.replace(`/posts/${postId}`);
       } else {
         alert('Failed to create comment');
       }
@@ -40,6 +41,6 @@ const newFormHandler = async (event) => {
     .querySelector('.new-comment-form')
     .addEventListener('submit', newFormHandler);
   
-  document
-    .querySelector('.comment-list')
-    .addEventListener('click', delButtonHandler);
+//   document
+//     .querySelector('.comment-list')
+//     .addEventListener('click', delButtonHandler);

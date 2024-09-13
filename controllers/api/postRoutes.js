@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Post } = require('../../models');
+const { Post, User } = require('../../models');
 const withAuth = require('../../utils/auth');
 
 router.post('/', withAuth, async (req, res) => {
@@ -17,33 +17,40 @@ router.post('/', withAuth, async (req, res) => {
 });
 
 
-// router.get('/posts/:id', async (req, res) => {
-//   try {
-//     const postData = await Post.findByPk(req.params.id, {
-//       include: [
-//         {
-//           model: User,
-//           attributes: ['name'],
-//         },
-//       ],
-//     });
+router.get('/posts/:id', async (req, res) => {
+  try {
+    const postData = await Post.findByPk(req.params.id, {
+      include: [
+        {
+          model: User,
+          attributes: ['name'],
+        },
+        {
+          model: Comment,
+          attributes: ['content'],
+        }
+      ],
+    });
 
-//     const post = postData.get({ plain: true });
+    const post = postData.get({ plain: true });
 
-//     res.render('posts', {
-//       ...post,
-//       logged_in: req.session.logged_in
-//     });
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// });
+    res.render('posts', {
+      ...post,
+      logged_in: req.session.logged_in
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
-// router.get('/', async, (req,res) =>{
-//   const allPosts = await Post.findAll({
-    
-//   })
-// })
+router.get('/', async (req,res) => {
+  try{
+    const allPosts = await Post.findAll();
+    res.status(200).json(allPosts);
+  } catch {
+    res.status(500).json(err);
+  }
+});
 
 // // Route for creating a new blog post
 // router.post('/new-post', async (req, res) => {
