@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Post } = require('../../models');
+const { Post, User } = require('../../models');
 const withAuth = require('../../utils/auth');
 
 router.post('/', withAuth, async (req, res) => {
@@ -16,6 +16,41 @@ router.post('/', withAuth, async (req, res) => {
   }
 });
 
+
+router.get('/posts/:id', async (req, res) => {
+  try {
+    const postData = await Post.findByPk(req.params.id, {
+      include: [
+        {
+          model: User,
+          attributes: ['name'],
+        },
+        {
+          model: Comment,
+          attributes: ['content'],
+        }
+      ],
+    });
+
+    const post = postData.get({ plain: true });
+
+    res.render('posts', {
+      ...post,
+      logged_in: req.session.logged_in
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get('/', async (req,res) => {
+  try{
+    const allPosts = await Post.findAll();
+    res.status(200).json(allPosts);
+  } catch {
+    res.status(500).json(err);
+  }
+});
 
 // // Route for creating a new blog post
 // router.post('/new-post', async (req, res) => {
@@ -64,5 +99,19 @@ router.delete('/:id', withAuth, async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+// router.post('posts/:id', withAuth, async (req, res) => {
+//   try {
+//     const { comment_text } = req.body
+//     const newComment = await Comment.create({
+//       ...req.body,
+//       user_id: req.session.user_id,
+//     });
+
+//     res.status(200).json(newComment);
+//   } catch (err) {
+//     res.status(400).json(err);
+//   }
+// });
 
 module.exports = router;

@@ -1,37 +1,54 @@
 const router = require('express').Router();
-const { Post, User } = require('../models');
+const { Post, User, Comment } = require('../models');
 const withAuth = require('../utils/auth');
 
-router.get('/', async (req, res) => {
-  if (req.session.logged_in) {
-    // res.redirect('/profile');
-    try {
-    // Get all posts and JOIN with user data
-    const postData = await Post.findAll({
-      include: [
-        {
-          model: User,
-          attributes: ['name'],
-        },
-      ],
-    });
+router.get('/', withAuth, async (req, res) => {
+  try{
+   const posts = await Post.findAll({
+    include: [{
+              model: User,
+              attributes: ['name'],
+            },
+          ],
+        });
+   console.log('Posts List: ', posts);
+   const postList = posts.map(post => post.get({ plain: true }));
+   res.render('homepage', { posts: postList });
+  } catch(err) {
+  res.status(500)
+  .json({ message: 'Failed to fetch posts', error: err.message });
+ }
+ });
+// router.get('/', async (req, res) => {
+//   // if (req.session.logged_in) { maybe uncomment not sure
+//     // res.redirect('/profile');
+//     try {
+//     // Get all posts and JOIN with user data
+//     const postData = await Post.findAll({
+//       include: [
+//         {
+//           model: User,
+//           attributes: ['name'],
+//         },
+//       ],
+//     });
 
-    // Serialize data so the template can read it
-    const posts = postData.map((posts) => posts.get({ plain: true }));
+//     // Serialize data so the template can read it
+//     const posts = postData.map((posts) => posts.get({ plain: true }));
 
-    // Pass serialized data and session flag into template
-    res.render('homepage') 
-    //   { 
-    //   posts, 
-    //   logged_in: req.session.logged_in 
-    // }
-  ;
-    } catch (err) {
-      res.status(500).json(err)};
-  } else {
-    res.redirect('login')
-  }
-});
+//     // Pass serialized data and session flag into template
+//     res.render('homepage') 
+//     //   { 
+//     //   posts, 
+//     //   logged_in: req.session.logged_in 
+//     // }
+//   ;
+//     } catch (err) {
+//       res.status(500).json(err)};
+//   // } else {
+//   //   res.redirect('login') maybe uncomment
+//   // }
+// });
 
 router.get('/posts/:id', async (req, res) => {
   try {
@@ -41,10 +58,15 @@ router.get('/posts/:id', async (req, res) => {
           model: User,
           attributes: ['name'],
         },
+        {
+          model: Comment,
+          include: [User]
+        }
       ],
     });
 
     const post = postData.get({ plain: true });
+    console.log(post)
 
     res.render('posts', {
       ...post,
@@ -88,10 +110,9 @@ router.get('/profile', withAuth, async (req, res) => {
 router.get('/login', (req, res) => {
   // If the user is already logged in, redirect the request to another route
   if (req.session.logged_in) {
-    res.redirect('/profile');
+    res.redirect('/');
     return;
   }
-
   res.render('login');
 });
 
