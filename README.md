@@ -14,8 +14,10 @@ The blogsite is deployed [here.](https://week-fourteen-challenge-karenas.onrende
 
 ## Screenshots
 
-
-
+[homepage](Homepage.png "homepage")
+[loginpage](loginSignupPage.png "login")
+[profile](ProfilePage.png "profile")
+[postpage](examplePage.png "Post")
 
 
 ## License
